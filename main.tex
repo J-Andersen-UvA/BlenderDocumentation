@@ -208,6 +208,19 @@ Whilst holding ``Alt" we can select individual bones and check if the weight pai
     \item CTRL-J to join them back together
 \end{enumerate}
 
+\subsection{Automatic weights method 2}
+Sometimes the model is too complex for the first method. We need to do something simpler to fix this. Following the guide in \url{https://3dmodels.org/blog/automatic-weights-in-blender/}, we can achieve this by doing the following:
+\begin{enumerate}
+    \item Check Model/Rig.
+    \begin{itemize}
+        \item Check scaling: make sure your model and rig aren’t too small – Automatic Weights works best with larger/less dense models.
+        \item Check for Overlapping Vertices: overlapping vertices on your model might cause Automatic Weights to fail. To remove them, select all (A) in edit mode, and press M > By Distance to merge them.
+        \item Check for Non-Manifold Geometry: check your model for non-manifold geometry such as interior faces and loose vertices – delete these if they’re present.
+    \end{itemize}
+    \item In Object Mode, select your model first, then select your armature; press Ctrl/Cmd – P to open the parenting menu, and select With Automatic Weights.
+\end{enumerate}
+Your model should now be attached to your rig! To test it out, try entering Pose Mode by pressing Ctrl/Cmd – Tab and rotating a bone on your armature – if everything worked properly, your mesh should now move in sync with the bones on your armature.
+
 \section{Freemocap - from importing, rigging, to retargeting within Blender}
 After recording and exporting with the Freemocap motion capture software. We get a Blender file. Within Blender, we have the ability to import these files, re-rig the Freemocap skeleton to a more common rig like UE Metahuman rig, and finally using the expy plugin, we can retarget the animation onto whatever skeleton we want. This section walks you through these processes.
 
