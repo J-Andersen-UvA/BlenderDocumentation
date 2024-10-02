@@ -284,6 +284,19 @@ In Blender, we encountered such a problem when trying to retarget to a ReadyPlay
 StretchSense has notified us that the coordinate system of Hand Engine is the same as Unreal's coordinate system. In addition, using a good primary bone axis in the export out of Blender is also important. If u see the retarget working in the correct directions, but the mesh of each part are turning in the wrong direction, then you are not using correct bone axis.
 
 
+\section{Bugs and fixes}
+\subsection{FBX has no blendshapes?}
+Just like the blendshape bug in other software, Blender has its own issues. We have found that we don't always see the facialblendshapes when using an exported FBX from Unreal Engine. In the same manner how we solve this for other software, we convert the FBX into a GLB with the NPM package ``fbx2gltf". The resulting GLB file should have working facial animations.
+
+\subsection{Spheres instead of bones?}
+On some file format imports, Blender defaults the bones to spheres. Simply go to: Armature$>$Data$>$Viewport Display. In this menu, disable the Shapes option (see figure \ref{fig:boneSpheres}).
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[height=0.5\textheight]{imgs/boneSpheres.png}
+    \caption{Blender menu location to get normal bones and not spheres.}
+    \label{fig:boneSpheres}
+\end{figure}
+
 %-------------------------------------------------------------------------------
 %	REFERENTIES
 %-------------------------------------------------------------------------------
