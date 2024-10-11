@@ -237,6 +237,14 @@ After adding the rig, feel free to remove everything else in the hierarchy.
     \label{fig:rigifyfreemocap}
 \end{figure}
 
+\section{Copying over animations}
+
+\subsection{Copying over blendshapes}
+blend glb -> select mesh -> select action editor anim -> if bones visible select dope sheet
+
+\subsection{Known issue shape keys baking}
+Shape keys are not supported to be baked into an animation. How should we tackle this?
+
 \subsection{Expy - retargeting freemocap animations}
 We will retarget using the \href{https://ballsandninjas.gumroad.com/l/xotibs}{``expy kit"} by balssandninjas. Firstly, import your target avatar (if needed set automatic bone orientation in the import as shown in figure \ref{fig:correctimportsettings}). Make sure to apply all translations to the imported avatar (Object Mode $>$ Object $>$ Apply $>$ All Transforms). Select the target skeleton and go into Pose Mode. Next, open the Expy menu and set the ``Bind To" to the source skeleton root (see figure \ref{fig:retargetexpy}).
 After clicking ``Bind Armatures" you can edit the retargeting options in the lower left of the screen.
@@ -282,7 +290,6 @@ In Blender, we encountered such a problem when trying to retarget to a ReadyPlay
 \end{figure}
 
 StretchSense has notified us that the coordinate system of Hand Engine is the same as Unreal's coordinate system. In addition, using a good primary bone axis in the export out of Blender is also important. If u see the retarget working in the correct directions, but the mesh of each part are turning in the wrong direction, then you are not using correct bone axis.
-
 
 \section{Bugs and fixes}
 \subsection{FBX has no blendshapes?}
