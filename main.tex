@@ -97,6 +97,29 @@ When exporting through Unreal Engine, the engine uses its own coordinate system.
     \label{fig:correctimportsettings}
 \end{figure}
 
+\subsection{Importing RPM}
+We are able to use the original RPM glb, but at that point you will need to keep in mind that the morph target names will not match anymore. The way I get the avatar to be compliant with our gathered animations is the following:
+\begin{enumerate}
+    \item Original glb into Unreal Engine
+    \item Export as fbx out of Unreal Engine
+    \item Use NPM, fbx2gltf tool to convert to glb
+    \item Import the converted glb into Blender
+    \item To fix the materials, either import the materials and fix it through the shader graph by hand, or import the original glb and copy paste the materials over to the converted avatar.
+\end{enumerate}
+
+
+\section{Scripting in Blender}
+Scripting is done through the scripting tab. Here you can write Python code that directly interacts with Blender through the following:
+\begin{itemize}
+    \item Builtin Modules:\\bpy, bpy.data, bpy.ops, bpy.props, bpy.types, bpy.context, bpy.utils, bgl, gpu, blf, mathutils
+    \item Imports:\\from mathutils import *; from math import *
+    \item Convenient Variables:\\C = bpy.context, D = bpy.data
+\end{itemize}
+
+We can run Blender with the python subprocess library. This enables us to pipeline various scripts in order to process multiple files in succession. The following link holds an example of how to execute Blender processes in the background with the execution of various scripts within Blender \url{https://github.com/J-Andersen-UvA/freemocapAutoRetargetBlender/blob/main/automaticFreemocapRetarget.py} .
+
+Lastly, Blender also enables us to access Python code of plugins through the bpy.ops Python object. \url{https://blender.stackexchange.com/questions/8673/how-can-i-safely-call-another-addon} . All in all, the combination of Python, sub-processes, and the ability to call complex addons makes for a very fun coding experience.
+
 \section{Rigging Techniques in Blender}
 \subsection{Modifying the rest pose}
 Modifying the rest pose can be important due to various reasons. One might want to edit this because of the StretchSense software where a T-pose is required (see section \ref{section:stretchsense}). In my efforts to learning this system I came across 2 issues that will be discussed in this section.
@@ -237,10 +260,55 @@ After adding the rig, feel free to remove everything else in the hierarchy.
     \label{fig:rigifyfreemocap}
 \end{figure}
 
-\section{Copying over animations}
+\section{Viewing blendshape data}
+Make sure to select the correct part of the avatar in Blender to be able to view the blendshapes. Make sure to select the mesh for shapekey/blendshapes. Figures \ref{fig:shapekeybones}, \ref{fig:shapekeysmesh}, and \ref{fig:dopesheetmesh} showcase how easily you can miss shapekeys if you have selected the wrong part of the avatar.
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imgs/viewingBlends/dopesheetnothingvisible.png}
+    \caption{Blender shapekey viewer - bones selected, then you will not see shapekeys }
+    \label{fig:shapekeybones}
+\end{figure}
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imgs/viewingBlends/actionkeys.png}
+    \caption{Blender shapekey viewer - mesh selected, then you will see shapekeys }
+    \label{fig:shapekeysmesh}
+\end{figure}
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imgs/viewingBlends/dopesheet.png}
+    \caption{Blender dopesheet viewer - mesh selected, then you will see shapekeys and animation keys }
+    \label{fig:dopesheetmesh}
+\end{figure}
 
-\subsection{Copying over blendshapes}
-blend glb -> select mesh -> select action editor anim -> if bones visible select dope sheet
+\section{Copying over animations}
+Firstly, make sure that the avatar with and without the animations are present in the scene. Then select the avatar without the animation and use the action editor to select the animation that is on the other avatar. Skeletal animations should now be displayed on your new avatar. Supporting figures are \ref{fig:anim1} and \ref{fig:anim2}.
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imgs/copyingAnims/Anim1.png}
+    \caption{Blender action editor viewer - the original animation on the original avatar, the avatar on the right is selected }
+    \label{fig:anim1}
+\end{figure}
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{imgs/copyingAnims/Anim2.png}
+    \caption{Blender action editor viewer - the location to copy over animations }
+    \label{fig:anim2}
+\end{figure}
+
+For the shapekeys, we select the original mesh and go into the shape key editor. Here we copy the keys by hand. Now go into the mesh for the target avatar and paste it onto the shapekeys. Supporting figures are \ref{fig:blend1} and \ref{fig:blend2}.
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.8\textwidth]{imgs/copyingAnims/Blend1.png}
+    \caption{Blender shape key editor viewer - the original shapekeys on the original avatar, the avatar on the right is selected }
+    \label{fig:blend1}
+\end{figure}
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.4\textwidth]{imgs/copyingAnims/Blend2.png}
+    \caption{Blender shape key editor viewer - after copying over the shapekeys }
+    \label{fig:blend2}
+\end{figure}
 
 \subsection{Known issue shape keys baking}
 Shape keys are not supported to be baked into an animation. How should we tackle this?
@@ -254,6 +322,17 @@ After clicking ``Bind Armatures" you can edit the retargeting options in the low
     \caption{Expy kit - the ``Bind To" option}
     \label{fig:retargetexpy}
 \end{figure}
+
+\section{Rendering}
+How to render:
+\url{https://www.youtube.com/watch?v=APmw2Q8kBOM}
+How to have higher fps:
+\url{https://www.youtube.com/watch?v=3iSPU61QD78}
+
+\subsection{Blender auto render}
+\url{https://github.com/J-Andersen-UvA/BlenderAutoRender}, contains methods to automatically render animations onto given blender scenes. Skeletal and morph animations are automatically remapped based on bone and morph names.
+
+
 \section{StretchSense}\label{section:stretchsense}
 \subsection{Pose Matching}
 For StretchSense, Pose Matching is also used. On their website, there is a description of how the avatar's pose should be: \url{https://stretchsense.my.site.com/defaulthelpcenter26Sep/s/article/Fidelity-and-SuperSplay-Glove-Unreal-Engine-Streaming}. However, this cannot be done in the Hand Engine software. It is recommended to use software such as Blender, Cinema 4D, Autodesk, etc. The task here is to pose the avatar in a T-pose and provide the following characteristics:
@@ -293,7 +372,7 @@ StretchSense has notified us that the coordinate system of Hand Engine is the sa
 
 \section{Bugs and fixes}
 \subsection{FBX has no blendshapes?}
-Just like the blendshape bug in other software, Blender has its own issues. We have found that we don't always see the facialblendshapes when using an exported FBX from Unreal Engine. In the same manner how we solve this for other software, we convert the FBX into a GLB with the NPM package ``fbx2gltf". The resulting GLB file should have working facial animations.
+Just like the blendshape bug in other software, Blender has its own issues. We have found that we don't see the facialblendshapes when using an exported FBX from Unreal Engine. In the same manner how we solve this for other software, we convert the FBX into a GLB with the NPM package ``fbx2gltf". The resulting GLB file should have working facial animations.
 
 \subsection{Spheres instead of bones?}
 On some file format imports, Blender defaults the bones to spheres. Simply go to: Armature$>$Data$>$Viewport Display. In this menu, disable the Shapes option (see figure \ref{fig:boneSpheres}).
@@ -304,6 +383,20 @@ On some file format imports, Blender defaults the bones to spheres. Simply go to
     \label{fig:boneSpheres}
 \end{figure}
 
+\subsection{Where are my textures?}
+Does your mesh even have the correct textures? Select the mesh and go into the Material tab to check if anything is wrong with the texture (see figure \ref{fig:texts}).
+\begin{figure}[hbt!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{imgs/material.png}
+    \caption{Blender Material menu Icon.}
+    \label{fig:texts}
+\end{figure}
+
+If not, you may need to replace them with the correct materials. \textit{Tip:} get the same mesh with all materials intact, import it. Use the materials coming with that mesh to quickly setup your target mesh.
+
+\subsection{Why is my animation/skeleton folded?}
+When importing a new animation, and then using that action (animation) on an avatar that is already present, it can result in your avatar folding in half or displaying other weird behaviors. This is due to the bone roll. Make sure that the target avatar has the same bone roll as the imported animation (or make sure to fix this in your export out of other software). \textit{Tip:} put the action on the avatar, and then fix the bone rolls in the edit mode. Switch back and forwards between edit mode and object mode to see if you selected the correct bone roll.
+\url{https://github.com/J-Andersen-UvA/BlenderAutoRender}, contains a fix bone roll option.
 %-------------------------------------------------------------------------------
 %	REFERENTIES
 %-------------------------------------------------------------------------------
